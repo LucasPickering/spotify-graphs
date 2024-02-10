@@ -1,0 +1,15 @@
+[tool.poetry]
+authors = ["Lucas Pickering <lucas@lucaspickering.me>"]
+description = ""
+name = "spotify-graphs"
+packages = [{include = "spotify_graphs"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+httpx = "^0.26.0"
+python = "^3.10"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
