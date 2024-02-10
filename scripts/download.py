@@ -44,17 +44,19 @@ async def download_tracks(
     ) as client:
         # First, run each search term and take the first page of results
         print("Downloading tracks")
-        tracks = [
-            track
+        tracks = {
+            track["id"]: track
             for tracks in await tqdm.gather(
                 *(search(client, query) for query in search_terms),
                 total=len(search_terms),
             )
             for track in tracks
-        ]
+        }
 
         # Grab all the artist IDs so we can do a separate request to get genres
-        artist_ids = {artist["id"] for track in tracks for artist in track["artists"]}
+        artist_ids = {
+            artist["id"] for track in tracks.values() for artist in track["artists"]
+        }
 
         print("Downloading artists")
         artists = itertools.chain.from_iterable(
@@ -70,8 +72,8 @@ async def download_tracks(
     artist_genres = {artist["id"]: artist["genres"] for artist in artists}
 
     # Join tracks with their genres
-    keys_to_delete = set(tracks[0].keys()) - TRACK_KEYS
-    for track in tracks:
+    for track in tracks.values():
+        keys_to_delete = set(track.keys()) - TRACK_KEYS
         track["genres"] = list(
             {
                 genre
@@ -82,7 +84,7 @@ async def download_tracks(
         for key in keys_to_delete:
             del track[key]
 
-    return tracks
+    return list(tracks.values())
 
 
 def get_access_token(creds):
