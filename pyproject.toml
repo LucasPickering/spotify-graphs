@@ -2,7 +2,6 @@
 authors = ["Lucas Pickering <lucas@lucaspickering.me>"]
 description = ""
 name = "spotify-graphs"
-packages = [{include = "spotify_graphs"}]
 readme = "README.md"
 version = "0.1.0"
 
